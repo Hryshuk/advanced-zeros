@@ -19,31 +19,31 @@ module.exports = function getZerosCount(number, base) {
     return pfs;
   }
 
-  function getPrimeFactorizationsNumber(num, pfBase) {
-    let pfs = new Map();
-
-    for(let key of pfBase.keys()) {
-      while (num % key == 0) {
-        let pf = pfs.get(key) || 0;
-        pf++;
-        pfs.set(key, pf);
-        num = num / key;
-      }
+  function getPrimeFactorizationsNumber(num, key) {
+    let pf = 0;
+    while (num % key == 0) {
+      pf++;
+      num = num / key;
     }
-    return pfs;
+    return pf;
   }
 
   let pfBase = getPrimeFactorizationsBase(base);
   let pfNumber = new Map();
 
   for (let n = 1; n <= number; n++) {
-    let pfNum = getPrimeFactorizationsNumber(n, pfBase);
     for(let key of pfBase.keys()) {
-      if (pfNum.has(key)) {
-        let v = pfNumber.get(key) || 0;
-        let value = pfNum.get(key);
-        pfNumber.set(key, v + value);
+      //let value = getPrimeFactorizationsNumber(n, key);
+
+      let num = n;
+      let value = 0;
+      while (num % key == 0) {
+        value++;
+        num = num / key;
       }
+
+      let v = pfNumber.get(key) || 0;
+      pfNumber.set(key, v + value);
     }
   }
 
