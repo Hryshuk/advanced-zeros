@@ -29,31 +29,39 @@ module.exports = function getZerosCount(number, base) {
   }
 
   let pfBase = getPrimeFactorizationsBase(base);
-  let pfNumber = new Map();
+  
+
+  console.log(pfBase);
+
+  let key = Math.max(...pfBase.keys());
+  let pfNumber = 0;
 
   for (let n = 1; n <= number; n++) {
-    for(let key of pfBase.keys()) {
+    
+    
+    //for(let key of pfBase.keys()) {
       //let value = getPrimeFactorizationsNumber(n, key);
 
-      let num = n;
+      /* let num = n;
       let value = 0;
       while (num % key == 0) {
-        value++;
+        pfNumber++;
         num = num / key;
-      }
+      } */
 
-      let v = pfNumber.get(key) || 0;
-      pfNumber.set(key, v + value);
-    }
+      pfNumber = pfNumber + getPrimeFactorizationsNumber(n, key);
+    //}
   }
 
-  let values = [];
+  /* let values = [];
   pfBase.forEach( (value, key) => {
     if (pfNumber.has(key)) {
       values.push(Math.floor(pfNumber.get(key) / value));
     }
-  });
+  }); */
 
-  return Math.min(...values);
+  return Math.floor(pfNumber / pfBase.get(key));
+
+  //return Math.min(...values);
 
 }
