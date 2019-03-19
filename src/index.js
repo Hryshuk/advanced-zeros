@@ -1,7 +1,7 @@
 module.exports = function getZerosCount(number, base) {
   // your implementation
 
-  const PrimeFactorizationsBase = (num) => {
+  const primeFactorizationsBase = (num) => {
     let k= 2;
     let n = num;
     let pfs = new Map();
@@ -10,7 +10,6 @@ module.exports = function getZerosCount(number, base) {
         let pf = pfs.get(k) || 0;
         pf++;
         pfs.set(k, pf);
-
         n = n / k;
       } else {
         k++;
@@ -19,70 +18,55 @@ module.exports = function getZerosCount(number, base) {
     return pfs;
   }
 
-  const pfBase = PrimeFactorizationsBase(base);
+  const primeFactorizationsCount = (num, key) => {
+    let count = 0;
+    let i = 1;
+    let n = 0;
+    do {
+      n = Math.floor(num / Math.pow(key, i));
+      count += n;
+      i++;
+    } while (n > 0)
+
+    return count;
+  }
+
+  const pfBase = primeFactorizationsBase(base);
   //console.log(pfBase);
+  let pfNumber = new Map();
 
-  const key1 = Math.max(...pfBase.keys());
-  const value1 = pfBase.get(key1);
-  let pfNumber1 = 0;
-
-  let key2 = null;
-  let value2 = null;
-  let pfNumber2 = 0;
-
-  pfBase.delete(key1);
-  if (pfBase.size) {
-    key2 = Math.max(...pfBase.keys());
-    value2 = pfBase.get(key2);
+  for(let key of pfBase.keys()) {
+    const count = primeFactorizationsCount(number, key);
+    const value = pfNumber.get(key) || 0;
+    pfNumber.set(key, value + count); 
   }
 
-  for (let n = 1; n <= number; n++) {
-    let num = n;
-
-    if (key1) {
-      let value = 0;
-      while (num % key1 == 0) {
-        value++;
-        num = num / key1;
-      }
-      pfNumber1 += value;
+  let values = [];
+  pfBase.forEach( (value, key) => {
+    if (pfNumber.has(key)) {
+      values.push(Math.floor(pfNumber.get(key) / value));
     }
-
-    if (key2 && value2 > 4) {
-      let value = 0;
-      while (num % key2 == 0) {
-        value++;
-        num = num / key2;
-      }
-      pfNumber2 += value;
-    }
-  }
-
-  if (pfNumber1 && pfNumber2 && value1 && value2) {
-    return Math.min(Math.floor(pfNumber1 / value1), Math.floor(pfNumber2 / value2));
-  } else if (pfNumber1 && value1){
-    return Math.floor(pfNumber1 / value1);
-  }
-
+  });
+  return Math.min(...values);
 
 /*
-  const PrimeFactorizationsNumber = (num, key) => {
-    let pf = 0;
+  const primeFactorizationsCount = (num, key) => {
+    let count = 0;
     while (num % key == 0) {
-      pf++;
+      count++;
       num = num / key;
     }
-    return pf;
+    return count;
   }
 
-  const pfBase = PrimeFactorizationsBase(base);
+  const pfBase = primeFactorizationsBase(base);
   let pfNumber = new Map();
   //console.log(pfBase);
   for (let n = 1; n <= number; n++) {
     for(let key of pfBase.keys()) {
-      const value = getPrimeFactorizationsNumber(n, key);
-      const v = pfNumber.get(key) || 0;
-      pfNumber.set(key, v + value); 
+      const count = primeFactorizationsCount(n, key);
+      const value = pfNumber.get(key) || 0;
+      pfNumber.set(key, value + count); 
     }
   }
 
