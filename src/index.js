@@ -66,7 +66,7 @@ module.exports = function getZerosCount(number, base) {
       /* let v = pfNumber.get(key) || 0;
       pfNumber.set(key, v + value); */
 
-      if (key2) {
+      if (key2 && value2 > 4) {
         let value = 0;
         while (num % key2 == 0) {
           value++;
